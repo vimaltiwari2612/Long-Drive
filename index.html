@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+  let speed = 3;
+  let time = "s";
+
+  changeSpeed = (gearValue) => {
+    if (speed <= 1 && time == "s") {
+      speed = 999;
+      time = "ms";
+    }
+    if (speed > 999 && time == "ms") {
+      speed = 1;
+      time = "s";
+    }
+    if (gearValue < 0) {
+      if (time == "ms") {
+        if (speed < 100) speed += 10;
+        else speed += 300;
+      } else {
+        speed += 5;
+      }
+    } else {
+      if (time == "ms") {
+        if (speed < 100) speed -= 10;
+        else speed -= 300;
+      } else {
+        speed -= 5;
+      }
+    }
+
+    if (speed < 0 && time == "ms") {
+      alert("Brake failed!! Please refresh the game.");
+    }
+    if (speed > 20 && time == "s") {
+      alert("Too Slow to Move. Please increase the speed Or refresh the game.");
+    }
+    document.getElementById("road").style.animation =
+      "moving " + speed + "" + time + " linear infinite";
+    document.getElementById("speedometer").innerHTML = speed + "" + time;
+  };
+
+  brake = (ev) => {
+    changeSpeed(-1);
+  };
+
+  accelerate = (ev) => {
+    changeSpeed(1);
+  };
+
+</script>
+
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .background {
+      height: 100vh;
+      background: url(https://i.postimg.cc/k4G4fPVb/background-Copy.png);
+      background-position: bottom left;
+      animation: moving 3s linear infinite;
+    }
+
+    .car {
+      position: absolute;
+      left: 200px;
+      bottom: -50px;
+      width: 200px;
+    }
+
+    @keyframes moving {
+      from {
+        background-position: bottom right;
+      }
+
+      to {
+        background-position: bottom left;
+      }
+    }
+
+    #rotateMode {
+      border-radius: 50%;
+      width: 125px;
+      height: 125px;
+      background-color: blue;
+      color: white;
+      position: absolute;
+      top: 80%;
+      left: 80%;
+    }
+
+    #left {
+      position: absolute;
+      top: 50%;
+      left: 0px;
+      transform: translateY(-50%);
+    }
+
+    #right {
+      position: absolute;
+      top: 50%;
+      right: 0px;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+<div class="background" id="road">
+  <img src="https://i.postimg.cc/26DGZT3M/car.png" class="car" alt="">
+
+  <div class='circleBase' id='rotateMode'>
+    <table>
+      <tr>
+        <td>
+          <button id="left" onclick="brake();" class="btn btn-default btn-sm"><span
+              class="glyphicon glyphicon-arrow-left"></span></button>
+        </td>
+        <td> <button id="right" onclick="accelerate ();" class="btn btn-default btn-sm"><span
+              class="glyphicon glyphicon-arrow-right"></span></button> </td>
+      </tr>
+    </table>
+  </div>
+</div>
